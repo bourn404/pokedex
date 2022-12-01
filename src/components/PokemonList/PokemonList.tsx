@@ -10,20 +10,24 @@ export const PokemonList = () => {
   const { pokemons, loading } = useGetPokemons();
   const [search, setSearch] = useState("");
   const [pokemonsFiltered, setPokemonsFiltered] = useState<BasicPokemon[]>([]);
-  
+
   useEffect(() => {
     setPokemonsFiltered(pokemons.filter(pokemon => (pokemon.number.includes(search) || pokemon.name.toLowerCase().includes(search.toLowerCase()))));
   }, [search, pokemons]);
 
   return (
     <>
-      <input type="search" className={classes.search} placeholder={'Search by name or number...'} onChange={(e)=>setSearch(e.target.value)} />
-      <ul className={classes.list}>
-        {loading && <div>Loading...</div>}
-        {pokemonsFiltered.map((pkmn) => (
-          <PokemonTile key={pkmn.id} id={pkmn.id} name={pkmn.name} number={pkmn.number} types={pkmn.types} image={pkmn.image} />
-        ))}
-      </ul>
+      <input type="search" className={classes.search} placeholder={'Search by name or number...'} onChange={(e) => setSearch(e.target.value)} />
+      {pokemonsFiltered.length ?
+        (<ul className={classes.list}>
+          {loading && <div>Loading...</div>}
+          {pokemonsFiltered.map((pkmn) => (
+            <PokemonTile key={pkmn.id} id={pkmn.id} name={pkmn.name} number={pkmn.number} types={pkmn.types} image={pkmn.image} />
+          ))}
+        </ul>
+        ) : (
+          <h2>No Pokemon Found</h2>
+        )}
     </>
   );
 };
